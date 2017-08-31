@@ -62,7 +62,24 @@ formItems.add(element);
 mFormBuilder.addFormElements(formItems);
 mFormBuilder.refreshView();
 ```
-3. Now build and run!!
+
+3. Or add the Form Elements from a JSON String in your activity
+``` 'java'
+// initialize variables
+mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+mFormBuilder = new FormBuildHelper(this, mRecyclerView);
+
+// declare form elements
+try {
+    mFormBuilder.createFromJson("{\"elements\":[{\"type\":0,\"title\":\"Personal Info\"},{\"type\":4,\"title\":\"Email\",\"hint\":\"Enter Email\"}]}");
+} catch (IOException e) {
+    e.printStackTrace();
+} catch (JSONException e) {
+    e.printStackTrace();
+}
+mFormBuilder.refreshView();
+```
+4. Now build and run!!
 
 
 ## Reference
@@ -130,6 +147,47 @@ fruits.add("Mango");
 fruits.add("Guava");
 FormElement element = FormElement.createInstance().setType(FormElement.TYPE_PICKER_MULTI_CHECKBOX).setTitle("Multi Items").setOptions(fruits);
 ```
+
+### Json structure with elements
+``` 'json'
+{
+    "elements": [
+    {
+        "type": 0, // 0 is for HEADER_ELEMENT
+        "title": "Personal Info"
+    },
+    {
+        "tag": 12345,
+        "type": 4, // Defined in the FormElement class, 4 is for FormElement.TYPE_EDITTEXT_EMAIL
+        "title": "Email",
+        "value": "email@example.com",
+        "hint": "Please enter your email",
+        "required": true
+    },
+    {
+        "tag": 9999,
+        "type": 8, // Defined in the FormElement class, 8 is for FormElement.TYPE_SPINNER_DROPDOWN
+        "title": "Single Item",
+        "alertTitle": "Pick one",// Only for FormElement.TYPE_SPINNER_DROPDOWN and FormElement.TYPE_PICKER_MULTI_CHECKBOX
+        "options": ["Banana", "Orange", "Mango", "Guava"],// Only for FormElement.TYPE_SPINNER_DROPDOWN and FormElement.TYPE_PICKER_MULTI_CHECKBOX
+        "value": "Mango"
+    },
+    {
+        "tag": 1111,
+        "type": 9, // Defined in the FormElement class, 9 is for FormElement.TYPE_PICKER_MULTI_CHECKBOX
+        "title": "Multi Items",
+        "alertTitle": "Pick one or more",// Only for FormElement.TYPE_SPINNER_DROPDOWN and FormElement.TYPE_PICKER_MULTI_CHECKBOX
+        "positiveText": "Okay",// Only for FormElement.TYPE_PICKER_MULTI_CHECKBOX
+        "negativeText": "Cancel",// Only for FormElement.TYPE_PICKER_MULTI_CHECKBOX
+        "options": ["Banana", "Orange", "Mango", "Guava"],// Only for FormElement.TYPE_SPINNER_DROPDOWN and FormElement.TYPE_PICKER_MULTI_CHECKBOX
+        "required": true
+    },
+        .........
+        .........
+    ]
+}
+```
+
 
 ### Set form element value change listener to get changed value instantly
 While creating new instance of FormBuildHelper, add a listener in the constructor
